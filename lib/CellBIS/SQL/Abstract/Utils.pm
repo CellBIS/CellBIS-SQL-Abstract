@@ -2,6 +2,7 @@ package  # hide from PAUSE
   CellBIS::SQL::Abstract::Utils;
 
 use Mojo::Base -base;
+use Mojo::Util 'dumper';
 
 # For "column" with "value" :
 # ------------------------------------------------------------------------
@@ -11,8 +12,7 @@ sub col_with_val {
   
   my @data_col = @{$column};
   my @data_val = @{$value};
-  
-  my @data = map {$data_col[$_] . '=' . $data_val[$_]} keys @data_col;
+  my @data = map {$data_col[$_] . '=' . $data_val[$_]} 0 .. $#data_col;
   return @data;
 }
 
@@ -28,8 +28,9 @@ sub for_onjoin {
   my $size_join = @{$join};
   
   my @table_list = @{$table_name};
-  my %list_table = map {$table_list[$_]->{name} => $table_list[$_]} keys @table_list;
+  my %list_table = map {$_->{name} => $_} @{$table_name};
   my @get_primaryTbl = grep {$_->{primary} && $_->{primary} == 1} @table_list;
+  @get_primaryTbl = @get_primaryTbl ? @get_primaryTbl : ($table_list[0]);
   
   # Check IF founded primary table :
   if (@get_primaryTbl) {
@@ -113,8 +114,7 @@ sub replace_data_value_insert {
   my ($data_value) = @_;
   
   my @data = @{$data_value};
-  my @pre_data = ();
-  my @result = map {$pre_data[$_] => $data[$_] eq 'NOW()' ? 'NOW()' : '?'} keys @data;
+  my @result = map {$_ eq 'NOW()' ? 'NOW()' : '?'} @data;
   @result = grep (defined, @result);
   return @result;
 }
