@@ -29,10 +29,10 @@ sub insert {
   
   if ((scalar @table_field) == (scalar @table_data)) {
     
-    if ($type and $type ne '' and $type eq 'no-pre-st') {
+    if ($type && $type eq 'no-pre-st') {
       $value_col = join ', ', @table_data;
     }
-    elsif ($type and $type ne '' and $type eq 'pre-st') {
+    elsif ($type && $type eq 'pre-st') {
       @get_data_value = CellBIS::SQL::Abstract::Utils->replace_data_value_insert(\@table_data);
       $value_col = join ', ', @get_data_value;
     }
@@ -70,8 +70,8 @@ sub update {
   my $field_change = '';
   my $where_clause = '';
   
-  if ($type and $type ne '' and $type eq 'no-pre-st') {
-    my @get_value = CellBIS::SQL::Abstract::Utils->col_with_val(@table_field, @{$value});
+  if ($type && $type eq 'no-pre-st') {
+    my @get_value = CellBIS::SQL::Abstract::Utils->col_with_val($column, $value);
     $field_change = join ', ', @get_value;
     
     if (exists $clause->{where}) {
@@ -80,7 +80,7 @@ sub update {
     }
     
   }
-  elsif ($type and $type ne '' and $type eq 'pre-st') {
+  elsif ($type && $type eq 'pre-st') {
     $field_change = join '=?, ', @table_field;
     $field_change .= '=?';
     
