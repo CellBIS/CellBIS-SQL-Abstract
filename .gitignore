@@ -17,7 +17,7 @@ nytprof.out
 
 # Dizt::Zilla
 /.build/
-.dist.ini
+dist.ini
 
 # Module::Build
 _build/
