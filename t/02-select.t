@@ -10,10 +10,10 @@ my $select1 = $sql_abstract->select('table_test', []);
 ok($select1 eq 'SELECT * FROM table_test', "SQL Query [$select1] is true");
 
 my $select2 = $sql_abstract->select('table_test', [], {
-  'orderby' => 'id_mhs_kelas',
+  'orderby' => 'id_test',
   'order' => 'asc',
   'limit' => '5'
 });
-ok($select2 eq 'SELECT * FROM table_test ORDER BY id_mhs_kelas ASC LIMIT 5', "SQL Query [$select2] is true");
+ok($select2 eq 'SELECT * FROM table_test ORDER BY id_test ASC LIMIT 5', "SQL Query [$select2] is true");
 
 done_testing();
