@@ -22,8 +22,6 @@ sub for_onjoin {
   my $self = shift;
   my ($options, $table_name) = @_;
   my $data = "FROM " . $table_name->[0]->{name};
-  #	  print Dumper \@_;
-  #	  print Dumper $options;
   
   my %type = %{$options->{typejoin}};
   my $join = $options->{join};
@@ -48,7 +46,6 @@ sub for_onjoin {
     my $i = 0;
     my $table_join = '';
     my $type_join = '';
-    #  print "Jumlah Table = $size_table\n";
     while ($i < $size_join) {
       my $get_table = $join->[$i];
       $tbl_name = $get_table->{name};
@@ -101,9 +98,6 @@ sub create_clause {
 # ------------------------------------------------------------------------
 sub type_join {
   my ($self, $type) = @_;
-  #  my $size_param = scalar @_;
-  #  print "In sub type_join = $size_param\n";
-  #  print "In sub type_join size = $type\n";
   
   my %data_type = (
     'left'  => 'LEFT JOIN',
