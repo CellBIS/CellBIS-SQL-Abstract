@@ -4,7 +4,7 @@ use warnings;
 use Test::More tests => 2;
 
 use FindBin;
-use lib "$FindBin::Bin/lib";
+use lib "$FindBin::Bin/../lib";
 
 use CellBIS::SQL::Abstract;
 
