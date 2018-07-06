@@ -3,6 +3,9 @@ use strict;
 use warnings;
 use Test::More tests => 2;
 
+use FindBin;
+use lib "$FindBin::Bin/lib";
+
 use CellBIS::SQL::Abstract;
 
 my $sql_abstract = CellBIS::SQL::Abstract->new;
