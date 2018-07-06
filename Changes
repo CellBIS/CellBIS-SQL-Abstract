@@ -2,6 +2,8 @@ Revision history for perl distribution CellBIS-SQL-Abstract
 
 {{$NEXT}}
 
+0.3       2018-07-06 10:29:32+08:00 Asia/Makassar
+          - Fixed bug dependency
 
 0.2       2018-07-06 08:28:04+08:00 Asia/Makassar
           - Fixed bugs for Perl 5.10.1
