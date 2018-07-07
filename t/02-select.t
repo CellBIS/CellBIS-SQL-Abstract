@@ -10,14 +10,22 @@ use CellBIS::SQL::Abstract;
 
 my $sql_abstract = CellBIS::SQL::Abstract->new();
 
-my $select1 = $sql_abstract->select('table_test', []);
-ok($select1 eq 'SELECT * FROM table_test', "SQL Query [$select1] is true");
+my $select = $sql_abstract->select('table_test', []);
+ok($select eq 'SELECT * FROM table_test', "SQL Query [$select] is true");
 
-my $select2 = $sql_abstract->select('table_test', [], {
+$select = $sql_abstract->select('table_test', [], {
   'orderby' => 'id_test',
   'order' => 'asc',
   'limit' => '5'
 });
-ok($select2 eq 'SELECT * FROM table_test ORDER BY id_test ASC LIMIT 5', "SQL Query [$select2] is true");
+ok($select eq 'SELECT * FROM table_test ORDER BY id_test ASC LIMIT 5', "SQL Query [$select] is true");
+
+$select = $sql_abstract->select('table_test', ['data'], {
+  'groupby' => 'data',
+  'orderby' => 'id_test',
+  'order' => 'asc',
+  'limit' => '5'
+});
+ok($select eq 'SELECT data FROM table_test GROUP BY data ORDER BY id_test ASC LIMIT 5', "SQL Query [$select] is true");
 
 done_testing();

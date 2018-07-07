@@ -147,37 +147,41 @@ sub _qSelect_arg3 {
   my $data = '';
   my @col = @{$column};
   my $size_col = scalar @col;
-  my $field_change = '';
-  my $where_clause = '';
   
   if (ref($clause) eq "HASH") {
+    my $field_change;
+    my $where_clause;
+    
     my $size_clause = scalar keys %{$clause};
     
-    unless ($size_clause == 0) {
+    if ($size_clause != 0) {
       $where_clause = CellBIS::SQL::Abstract::Utils->create_clause($clause);
-      if ($size_col == 0) {
-        $field_change = '*';
+      if (scalar @col == 0) {
+        $data = 'SELECT * FROM '.$table_name . $where_clause;
       }
       
-      if ($size_col == 1) {
-        $field_change = join ', ', @col if (ref($column) eq 'ARRAY');
-        $field_change = '*';
+      elsif (scalar @col => 1) {
+        $field_change = ref($column) eq "ARRAY" ? (join ', ', @col) : '*';
+        $data = 'SELECT '. $field_change . ' FROM '. $table_name . $where_clause;
       }
       
-      $data = "SELECT $field_change FROM $table_name" . $where_clause;
     }
     else {
       if ($size_col == 0) {
+        say 'size_col', $size_col, 'true';
         $data = "SELECT * FROM $table_name";
       }
       
       if ($size_col >= 1) {
+        say 'size_col', $size_col, 'true';
         $field_change = join ', ', @col;
         $data = "SELECT $field_change FROM $table_name";
       }
     }
   }
   else {
+    my $field_change = '';
+    
     if ($size_col == 0) {
       $data = "SELECT * FROM $table_name";
     }
