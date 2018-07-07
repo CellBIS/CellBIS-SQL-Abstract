@@ -168,12 +168,10 @@ sub _qSelect_arg3 {
     }
     else {
       if ($size_col == 0) {
-        say 'size_col', $size_col, 'true';
         $data = "SELECT * FROM $table_name";
       }
       
       if ($size_col >= 1) {
-        say 'size_col', $size_col, 'true';
         $field_change = join ', ', @col;
         $data = "SELECT $field_change FROM $table_name";
       }
