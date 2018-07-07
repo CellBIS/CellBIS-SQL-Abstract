@@ -6,7 +6,7 @@ use Mojo::Util qw(trim);
 use CellBIS::SQL::Abstract::Utils;
 
 # ABSTRACT: SQL Abstract
-our $VERSION = '0.3';
+our $VERSION = '0.4';
 
 # For Query Insert :
 # ------------------------------------------------------------------------
