@@ -2,6 +2,9 @@ Revision history for perl distribution CellBIS-SQL-Abstract
 
 {{$NEXT}}
 
+0.4       2018-07-07 09:13:36+08:00 Asia/Makassar
+          Fixed bugs on "select" method and update "02-select.t"
+
 0.3       2018-07-06 10:29:32+08:00 Asia/Makassar
           - Fixed bug dependency
 
