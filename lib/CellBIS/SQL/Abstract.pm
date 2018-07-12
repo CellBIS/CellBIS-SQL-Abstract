@@ -243,6 +243,7 @@ Achmad Yusri Afandi, E<lt>yusrideb@cpan.orgE<gt>
 
 Copyright (C) 2018 by Achmad Yusri Afandi
 
-This program is free software, you can redistribute it and/or modify it under the terms of the Artistic License version 2.0.
+This program is free software, you can redistribute it and/or modify it under the terms of
+the Artistic License version 2.0.
 
 =cut
