@@ -1,4 +1,5 @@
-package CellBIS::SQL::Abstract::Table;
+package  # hide from PAUSE
+  CellBIS::SQL::Abstract::Util::Table;
 use Mojo::Base -base;
 
 use Scalar::Util qw(blessed);
@@ -17,27 +18,19 @@ sub fk_validator {
   );
   
   my $fk = $table_attr->{fk};
-  if (exists $fk->{name}) {
-    unless ($fk->{name} eq '') {
-      $fk_attr{name} = 1;
-    }
+  if (exists $fk->{name} && $fk->{name} ne '') {
+    $fk_attr{name} = 1;
   }
-  if (exists $fk->{col_name}) {
-    unless ($fk->{col_name} eq '') {
-      $fk_attr{col_name} = 1;
-    }
+  if (exists $fk->{col_name} && $fk->{col_name} ne '') {
+    $fk_attr{col_name} = 1;
   }
   
-  if (exists $fk->{table_target}) {
-    unless ($fk->{table_target} eq '') {
-      $fk_attr{table_target} = 1;
-    }
+  if (exists $fk->{table_target} && $fk->{table_target} ne '') {
+    $fk_attr{table_target} = 1;
   }
   
-  if (exists $fk->{col_target}) {
-    unless ($fk->{col_target} eq '') {
-      $fk_attr{col_target} = 1;
-    }
+  if (exists $fk->{col_target} && $fk->{col_target} ne '') {
+    $fk_attr{col_target} = 1;
   }
   my @r_val = grep {!$_} values %fk_attr;
   my $size_result = scalar @r_val;
@@ -153,8 +146,6 @@ sub table_col_attr_val {
   my $self = shift;
   my ($col_list, $col_attr) = @_;
   
-  #  print Dumper $col_list;
-  #  print Dumper $col_attr;
   if (ref($col_attr) eq "HASH") {
     my $i = 0;
     my $until = scalar @{$col_list};
@@ -165,7 +156,6 @@ sub table_col_attr_val {
     my $col_name = '';
     my $curr_colAttr = {};
     my $new_colAttr = Hash::MultiValue->new(%{$col_attr});
-    # print Dumper \@_;
     while ($i < $until) {
       $col_name = $col_attr->{$col_list->[$i]};
       if (exists $col_name->{'is_autoincre'}) {
@@ -380,32 +370,17 @@ sub create_queryTbl {
         $data .= ") $attr_table";
       }
       else {
-        if ($db_type eq 'sqlite') {
-          $data .= ")";
-        }
-        else {
-          $data .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
-        }
+        $data = $db_type eq 'sqlite' ? ")" : ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
       }
     }
     else {
-      if ($db_type eq 'sqlite') {
-        $data .= ")";
-      }
-      else {
-        $data .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
-      }
+      $data = $db_type eq 'sqlite' ? ")" : ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
     }
     
   }
   else {
     $data .= "$list_column\n";
-    if ($db_type eq 'sqlite') {
-      $data .= ")";
-    }
-    else {
-      $data .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
-    }
+    $data .= $db_type eq 'sqlite' ? ")" : ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
   }
   return $data;
 }
