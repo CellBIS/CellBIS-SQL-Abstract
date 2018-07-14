@@ -157,9 +157,7 @@ sub _qSelect_arg3 {
       $where_clause = $self->QueryUtil->create_clause($clause);
       if (scalar @col == 0) {
         $data = 'SELECT * FROM '.$table_name . $where_clause;
-      }
-      
-      elsif (scalar @col => 1) {
+      } else {
         $field_change = ref($column) eq "ARRAY" ? (join ', ', @col) : '*';
         $data = 'SELECT '. $field_change . ' FROM '. $table_name . $where_clause;
       }
@@ -168,9 +166,7 @@ sub _qSelect_arg3 {
     else {
       if ($size_col == 0) {
         $data = "SELECT * FROM $table_name";
-      }
-      
-      if ($size_col >= 1) {
+      } else {
         $field_change = join ', ', @col;
         $data = "SELECT $field_change FROM $table_name";
       }
@@ -181,8 +177,7 @@ sub _qSelect_arg3 {
     
     if ($size_col == 0) {
       $data = "SELECT * FROM $table_name";
-    }
-    if ($size_col >= 1) {
+    } else {
       $field_change = join ', ', @col;
       $data = "SELECT $field_change FROM $table_name";
     }
