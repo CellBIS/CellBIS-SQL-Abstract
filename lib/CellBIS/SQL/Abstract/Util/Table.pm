@@ -303,22 +303,25 @@ sub create_query_table {
   my $arg_len = scalar @_;
   my ($table_name, $col_list, $col_attr, $table_attr, $db_type);
   my $data = '';
-  my $size_tblAtr = 0;
+  my $size_tblAttr = 0;
+  $db_type = 'mysql';
   
   if ($arg_len == 3) {
     ($table_name, $col_list, $col_attr) = @_;
-    $db_type = 'mysql';
   }
   
   if ($arg_len == 4) {
     ($table_name, $col_list, $col_attr, $table_attr) = @_;
-    $size_tblAtr = scalar keys %{$table_attr};
-    $db_type = 'mysql';
+    if (ref($table_attr) eq "HASH") {
+      $size_tblAttr = scalar keys %{$table_attr};
+    } else {
+      $table_attr = {};
+    }
   }
   
   if ($arg_len >= 5) {
     ($table_name, $col_list, $col_attr, $table_attr, $db_type) = @_;
-    $size_tblAtr = scalar keys %{$table_attr};
+    $size_tblAttr = scalar keys %{$table_attr};
   }
   
   $col_attr = $self->table_col_attr_val($col_list, $col_attr);
@@ -343,7 +346,7 @@ sub create_query_table {
   
   $data .= "CREATE TABLE IF NOT EXISTS $table_name(\n";
   
-  unless ($size_tblAtr == 0) {
+  if ($size_tblAttr != 0) {
     $data .= "$list_column";
     my $size_fk = 0;
     if (exists $table_attr->{fk}) {
@@ -361,11 +364,11 @@ sub create_query_table {
         $data .= ") $attr_table";
       }
       else {
-        $data = $db_type eq 'sqlite' ? ")" : ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
+        $data .= $db_type eq 'sqlite' ? ")" : ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
       }
     }
     else {
-      $data = $db_type eq 'sqlite' ? ")" : ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
+      $data .= $db_type eq 'sqlite' ? ")" : ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
     }
     
   }
