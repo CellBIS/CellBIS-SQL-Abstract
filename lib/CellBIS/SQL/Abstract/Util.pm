@@ -1,5 +1,5 @@
 package  # hide from PAUSE
-  CellBIS::SQL::Abstract::Utils;
+  CellBIS::SQL::Abstract::Util;
 
 use Mojo::Base -base;
 use Mojo::Util 'dumper';
