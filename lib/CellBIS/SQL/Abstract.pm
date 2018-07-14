@@ -3,7 +3,7 @@ use Mojo::Base -base;
 
 use Scalar::Util qw(blessed);
 use Mojo::Util qw(trim);
-use CellBIS::SQL::Abstract::Utils;
+use CellBIS::SQL::Abstract::Util;
 
 # ABSTRACT: SQL Abstract
 our $VERSION = '0.5';
