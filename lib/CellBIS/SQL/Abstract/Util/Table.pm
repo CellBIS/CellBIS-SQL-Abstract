@@ -3,7 +3,7 @@ package  # hide from PAUSE
 use Mojo::Base -base;
 
 use Scalar::Util qw(blessed);
-use String::Util qw(trim);
+use Mojo::Util qw(trim);
 use Hash::MultiValue;
 
 # For Foreign Key Validator:
