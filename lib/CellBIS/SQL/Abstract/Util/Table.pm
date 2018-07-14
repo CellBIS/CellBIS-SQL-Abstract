@@ -300,38 +300,29 @@ sub create_colAttr {
 # ------------------------------------------------------------------------
 sub create_query_table {
   my $self = shift;
+  my $arg_len = scalar @_;
+  my ($table_name, $col_list, $col_attr, $table_attr, $db_type);
   my $data = '';
-  
-  my $table_name = $_[0];
-  my $col_list = $_[1];
-  my $col_attr = $_[2];
-  my $table_attr = {};
-  my $connector = {};
   my $size_tblAtr = 0;
-  my $db_type = '';
   
-  if (defined $_[4]) {
-    if (ref($_[3]) eq "HASH") {
-      $table_attr = $_[3];
-      $size_tblAtr = scalar keys %{$table_attr};
-    }
-    $connector = $_[4];
+  if ($arg_len == 3) {
+    ($table_name, $col_list, $col_attr) = @_;
+    $db_type = 'mysql';
   }
-  else {
-    if (ref($_[3]) eq "HASH") {
-      if (exists $_[3]->{db_type}) {
-        $connector = $_[3];
-      }
-      else {
-        $table_attr = $_[3];
-        $size_tblAtr = scalar keys %{$table_attr};
-      }
-    }
+  
+  if ($arg_len == 4) {
+    ($table_name, $col_list, $col_attr, $table_attr) = @_;
+    $size_tblAtr = scalar keys %{$table_attr};
+    $db_type = 'mysql';
+  }
+  
+  if ($arg_len >= 5) {
+    ($table_name, $col_list, $col_attr, $table_attr, $db_type) = @_;
+    $size_tblAtr = scalar keys %{$table_attr};
   }
   
   $col_attr = $self->table_col_attr_val($col_list, $col_attr);
   $table_attr = $self->table_attr_val($col_attr, $table_attr);
-  $db_type = $connector->{db_type} if ref($connector) eq "HASH" and exists $connector->{db_type};
   
   my $size_col = scalar @{$col_list};
   my $i = 0;
