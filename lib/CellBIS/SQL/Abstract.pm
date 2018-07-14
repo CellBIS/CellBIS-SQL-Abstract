@@ -8,6 +8,8 @@ use CellBIS::SQL::Abstract::Util;
 # ABSTRACT: SQL Abstract
 our $VERSION = '0.5';
 
+has 'QueryUtil' => sub { state $qu = CellBIS::SQL::Abstract::Util->new };
+
 # For Query Insert :
 # ------------------------------------------------------------------------
 sub insert {
@@ -33,11 +35,11 @@ sub insert {
       $value_col = join ', ', @table_data;
     }
     elsif ($type && $type eq 'pre-st') {
-      @get_data_value = CellBIS::SQL::Abstract::Utils->replace_data_value_insert(\@table_data);
+      @get_data_value = $self->QueryUtil->replace_data_value_insert(\@table_data);
       $value_col = join ', ', @get_data_value;
     }
     else {
-      @get_data_value = CellBIS::SQL::Abstract::Utils->replace_data_value_insert(\@table_data);
+      @get_data_value = $self->QueryUtil->replace_data_value_insert(\@table_data);
       $value_col = join ', ', @get_data_value;
     }
     
@@ -71,11 +73,11 @@ sub update {
   my $where_clause = '';
   
   if ($type && $type eq 'no-pre-st') {
-    my @get_value = CellBIS::SQL::Abstract::Utils->col_with_val($column, $value);
+    my @get_value = $self->QueryUtil->col_with_val($column, $value);
     $field_change = join ', ', @get_value;
     
     if (exists $clause->{where}) {
-      $where_clause = CellBIS::SQL::Abstract::Utils->create_clause($clause);
+      $where_clause = $self->QueryUtil->create_clause($clause);
       $data = "UPDATE $table_name SET $field_change" . $where_clause;
     }
     
@@ -85,7 +87,7 @@ sub update {
     $field_change .= '=?';
     
     if (exists $clause->{where}) {
-      $where_clause = CellBIS::SQL::Abstract::Utils->create_clause($clause);
+      $where_clause = $self->QueryUtil->create_clause($clause);
       $data = "UPDATE $table_name SET $field_change" . $where_clause;
     }
   }
@@ -94,7 +96,7 @@ sub update {
     $field_change .= '=?';
     
     if (exists $clause->{where}) {
-      $where_clause = CellBIS::SQL::Abstract::Utils->create_clause($clause);
+      $where_clause = $self->QueryUtil->create_clause($clause);
       $data = "UPDATE $table_name SET $field_change" . $where_clause;
     }
   }
@@ -111,7 +113,7 @@ sub delete {
   if (ref($clause) eq "HASH") {
     #    my $size_clause = scalar keys %{$clause};
     if (exists $clause->{where}) {
-      my $where_clause = CellBIS::SQL::Abstract::Utils->create_clause($clause);
+      my $where_clause = $self->QueryUtil->create_clause($clause);
       $data = "DELETE FROM $table_name" . $where_clause;
     }
   }
@@ -155,7 +157,7 @@ sub _qSelect_arg3 {
     my $size_clause = scalar keys %{$clause};
     
     if ($size_clause != 0) {
-      $where_clause = CellBIS::SQL::Abstract::Utils->create_clause($clause);
+      $where_clause = $self->QueryUtil->create_clause($clause);
       if (scalar @col == 0) {
         $data = 'SELECT * FROM '.$table_name . $where_clause;
       }
@@ -207,12 +209,12 @@ sub _qSelectJoin_arg3 {
   
   if (ref($clause) eq "HASH") {
     if (exists $clause->{join}) {
-      $join_clause = CellBIS::SQL::Abstract::Utils->for_onjoin($clause, $table_name);
-      $where_clause = CellBIS::SQL::Abstract::Utils->create_clause($clause);
+      $join_clause = $self->QueryUtil->for_onjoin($clause, $table_name);
+      $where_clause = $self->QueryUtil->create_clause($clause);
       $data = "SELECT $field_change $join_clause" . $where_clause;
     }
     else {
-      $where_clause = CellBIS::SQL::Abstract::Utils->create_clause($clause);
+      $where_clause = $self->QueryUtil->create_clause($clause);
       $data = "SELECT $field_change FROM $table_name";
     }
   }
