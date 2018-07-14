@@ -59,14 +59,10 @@ sub update {
   my $self = shift;
   my $arg_len = scalar @_;
   my ($table_name, $column, $value, $clause, $type);
-  
-  if ($arg_len == 4) {
-    ($table_name, $column, $value, $clause) = @_;
-  }
-  if ($arg_len == 5) {
-    ($table_name, $column, $value, $clause, $type) = @_;
-  }
   my $data = '';
+  
+  ($table_name, $column, $value, $clause) = @_ if $arg_len == 4;
+  ($table_name, $column, $value, $clause, $type) = @_ if $arg_len >= 5;
   
   my @table_field = @{$column};
   my $field_change = '';
@@ -141,6 +137,7 @@ sub select_join {
   $data = $self->_qSelectJoin_arg3(@_) unless ($arg_len < 3);
   return $data;
 }
+
 # For Action Query String - "select" - arg3 :
 # ------------------------------------------------------------------------
 sub _qSelect_arg3 {
