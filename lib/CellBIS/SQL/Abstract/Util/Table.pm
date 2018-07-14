@@ -298,7 +298,7 @@ sub create_colAttr {
 
 # For create query table :
 # ------------------------------------------------------------------------
-sub create_queryTbl {
+sub create_query_table {
   my $self = shift;
   my $data = '';
   
