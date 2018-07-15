@@ -218,7 +218,12 @@ SQL equivalent :
   my $clause = {
     where => 'id = 2'
   };
-  my $update = $sql_abstract->update($table_name, $column, $value, $clause);
+
+  # If no Prepare Statement
+  my $update_no_pre_st = $sql_abstract->update($table_name, $column, $value, $clause);
+
+  # IF Prepare Statement
+  my $update_no_pre_st = $sql_abstract->update($table_name, $column, $value, $clause, 'pre-st');
 
 SQL equivalent :
 
