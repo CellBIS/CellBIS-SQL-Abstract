@@ -7,7 +7,7 @@ use CellBIS::SQL::Abstract::Util;
 use CellBIS::SQL::Abstract::Table;
 
 # ABSTRACT: SQL Query Generator
-our $VERSION = '0.6';
+our $VERSION = '0.7';
 
 has 'QueryUtil' => sub { state $qu = CellBIS::SQL::Abstract::Util->new };
 
