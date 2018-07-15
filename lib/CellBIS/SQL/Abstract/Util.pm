@@ -12,7 +12,7 @@ sub col_with_val {
   
   my @data_col = @{$column};
   my @data_val = @{$value};
-  my @data = map {$data_col[$_] . '=' . $data_val[$_]} 0 .. $#data_col;
+  my @data = map {$data_col[$_] . '=\'' . $data_val[$_] . '\''} 0 .. $#data_col;
   return @data;
 }
 
