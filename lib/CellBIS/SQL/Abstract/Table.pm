@@ -1,5 +1,5 @@
 package  # hide from PAUSE
-  CellBIS::SQL::Abstract::Util::Table;
+  CellBIS::SQL::Abstract::Table;
 use Mojo::Base -base;
 
 use Scalar::Util qw(blessed);
