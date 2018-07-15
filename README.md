@@ -7,6 +7,23 @@ And the additional query has covered to create table
 You can you this module for [Mojo::mysql](https://metacpan.org/pod/Mojo::mysql) 
 or [DBI](https://metacpan.org/pod/DBI).
 
+## How to Install :
+From Source :
+```bash
+git clone -b v0.6 git@github.com:CellBIS/CellBIS-SQL-Abstract.git
+perl Makefile.PL
+make && make test
+make install && make clean
+```
+with `cpan` command :
+```bash
+cpan -i CellBIS::SQL::Abstract
+```
+with `cpanm` command :
+```bash
+cpanm -i CellBIS::SQL::Abstract
+```
+
 ## Synopsis Module :
 ```perl
 use CellBIS::SQL::Abstract
