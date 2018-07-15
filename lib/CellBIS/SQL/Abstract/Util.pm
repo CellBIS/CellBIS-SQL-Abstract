@@ -119,4 +119,16 @@ sub replace_data_value_insert {
   return @result;
 }
 
+# For replace data values "insert" in no prepare statement :
+# ------------------------------------------------------------------------
+sub replace_data_value_insert_no_pre_st {
+  my $self = shift;
+  my ($data_value) = @_;
+  
+  my @data = @{$data_value};
+  my @result = map {"'" . $_ . "'"} @data;
+  @result = grep (defined, @result);
+  return @result;
+}
+
 1;
