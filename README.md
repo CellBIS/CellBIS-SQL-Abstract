@@ -8,7 +8,7 @@ You can you this module for [Mojo::mysql](https://metacpan.org/pod/Mojo::mysql)
 or [DBI](https://metacpan.org/pod/DBI).
 
 ## Synopsis Module :
-```perl5
+```perl
 use CellBIS::SQL::Abstract
 my $sql_abstract = CellBIS::SQL::Abstract->new;
 
@@ -56,7 +56,7 @@ Methods `insert`, `update`, `select`, and `select_join` can use **prepare statem
 The following are the methods available from this module:
 
 ### create_table :
-```perl5
+```perl
 use CellBIS::SQL::Abstract
 my $sql_abstract = CellBIS::SQL::Abstract->new;
 
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS users(
 ```
 
 ### create_table with Foreign key 
-```perl5
+```perl
 use CellBIS::SQL::Abstract
 my $sql_abstract = CellBIS::SQL::Abstract->new;
 
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS company(
 ```
 
 ### insert
-```perl5
+```perl
 use CellBIS::SQL::Abstract
 my $sql_abstract = CellBIS::SQL::Abstract->new;
 
@@ -199,7 +199,7 @@ INSERT INTO my_users(first_name, last_name) VALUES(?, ?);
 ```
 
 ### update
-```perl5
+```perl
 use CellBIS::SQL::Abstract
 my $sql_abstract = CellBIS::SQL::Abstract->new;
 
@@ -232,7 +232,7 @@ UPDATE my_users SET first_name='Achmad Yusri', last_name='Afandi' WHERE id = 2;
 ```
 
 ### delete
-```perl5
+```perl
 use CellBIS::SQL::Abstract
 my $sql_abstract = CellBIS::SQL::Abstract->new;
 
@@ -248,7 +248,7 @@ DELETE FROM my_users WHERE id = 2;
 ```
 
 ### select
-```perl5
+```perl
 use CellBIS::SQL::Abstract
 my $sql_abstract = CellBIS::SQL::Abstract->new;
 
@@ -264,7 +264,7 @@ SQL equivalent :
   SELECT * FROM my_users WHERE id = 2;
 ```
 ### select_join
-```perl5
+```perl
 use CellBIS::SQL::Abstract
 my $sql_abstract = CellBIS::SQL::Abstract->new;
 
