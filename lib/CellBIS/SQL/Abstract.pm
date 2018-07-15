@@ -7,7 +7,7 @@ use CellBIS::SQL::Abstract::Util;
 use CellBIS::SQL::Abstract::Table;
 
 # ABSTRACT: SQL Abstract
-our $VERSION = '0.5';
+our $VERSION = '0.6';
 
 has 'QueryUtil' => sub { state $qu = CellBIS::SQL::Abstract::Util->new };
 
