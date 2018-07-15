@@ -261,7 +261,7 @@ my $select = $sql_abstract->select($table_name, $column, $clause);
 ```
 SQL equivalent :
 ```mysql
-  SELECT * FROM my_users WHERE id = 2;
+SELECT * FROM my_users WHERE id = 2;
 ```
 ### select_join
 ```perl
