@@ -63,6 +63,9 @@ The following are the methods available from this module:
 
 =head2 create_table
 
+  use CellBIS::SQL::Abstract
+  my $sql_abstract = CellBIS::SQL::Abstract->new;
+
   my $table_name = 'my_users';
   my $col_list = [ 'id', 'first_name', 'last_name', 'other_col_name' ];
   my $col_attr = {
@@ -109,13 +112,16 @@ This equivalent with :
 
 =head2 create_table - with foreign key
 
-  $table_name = 'my_companies';
-  $col_list = [
+  use CellBIS::SQL::Abstract
+  my $sql_abstract = CellBIS::SQL::Abstract->new;
+
+  my $table_name = 'my_companies';
+  my $col_list = [
     'id_company',
     'id_company_users',
     'company_name',
   ];
-  $col_attr = {
+  my $col_attr = {
     'id_company'       => {
       type          => {
         name => 'int',
@@ -168,6 +174,9 @@ This equivalent with :
 
 =head2 insert
 
+  use CellBIS::SQL::Abstract
+  my $sql_abstract = CellBIS::SQL::Abstract->new;
+
   my $table_name = 'my_users';
   my $column = [
     'first_name',
@@ -179,20 +188,23 @@ This equivalent with :
   ];
 
   # If no Prepare Statement
-  $sql_abstract->insert($table_name, $column, $value, 'no-pre-st');
+  my $insert_no_pre_st = $sql_abstract->insert($table_name, $column, $value);
 
   # IF Prepare Statement
-  $sql_abstract->insert($table_name, $column, $value);
+  my $insert = $sql_abstract->insert($table_name, $column, $value, 'pre-st');
 
 SQL equivalent :
 
   # No Prepare Statement :
-  INSERT INTO my_users(first_name, last_name) VALUES(my_name, my_last_name)
+  INSERT INTO my_users(first_name, last_name) VALUES('my_name', 'my_last_name');
 
-  # Preare Statement :
-  INSERT INTO my_users(first_name, last_name) VALUES(?, ?)
+  # Prepare Statement :
+  INSERT INTO my_users(first_name, last_name) VALUES(?, ?);
 
 =head2 update
+
+  use CellBIS::SQL::Abstract
+  my $sql_abstract = CellBIS::SQL::Abstract->new;
 
   my $table_name = 'my_users'; # Table name.
   my $column = [
@@ -206,23 +218,26 @@ SQL equivalent :
   my $clause = {
     where => 'id = 2'
   };
-  $sql_abstract->update($table_name, $column, $value, $clause);
+  my $update = $sql_abstract->update($table_name, $column, $value, $clause);
 
 SQL equivalent :
 
   # Preare Statement :
-  UPDATE my_users SET first_name=?, last_name=? WHERE id = 2
+  UPDATE my_users SET first_name=?, last_name=? WHERE id = 2;
 
   # No Prepare Statement :
-  UPDATE my_users SET first_name='Achmad Yusri', last_name='Afandi' WHERE id = 2
+  UPDATE my_users SET first_name='Achmad Yusri', last_name='Afandi' WHERE id = 2;
 
 =head2 delete
+
+  use CellBIS::SQL::Abstract
+  my $sql_abstract = CellBIS::SQL::Abstract->new;
 
   my $table_name = 'my_users';
   my $clause = {
     where => 'id = 2'
   };
-  $sql_abstract->delete($table_name, $clause);
+  my $delete = $sql_abstract->delete($table_name, $clause);
 
 SQL equivalent :
 
@@ -230,18 +245,24 @@ SQL equivalent :
 
 =head2 select
 
+  use CellBIS::SQL::Abstract
+  my $sql_abstract = CellBIS::SQL::Abstract->new;
+
   my $table_name = 'my_users';
   my $column = [];
   my $clause = {
     where => 'id = 2'
   };
-  $sql_abstract->select($table_name, $column, $clause);
+  my $select = $sql_abstract->select($table_name, $column, $clause);
 
 SQL equivalent :
 
-  SELECT * FROM my_users WHERE id = 2
+  SELECT * FROM my_users WHERE id = 2;
 
 =head2 select_join
+
+  use CellBIS::SQL::Abstract
+  my $sql_abstract = CellBIS::SQL::Abstract->new;
 
   my $table_list = [
     { name => 'my_users', 'alias' => 't1', primary => 1 },
@@ -269,7 +290,7 @@ SQL equivalent :
     'order'    => 'desc', # asc || desc
     'limit'    => '10'
   };
-  $sql_abstract->select_join($table_list, $column, $clause);
+  my $select_join = $sql_abstract->select_join($table_list, $column, $clause);
 
 SQL equivalent :
 
