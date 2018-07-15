@@ -67,7 +67,7 @@ $sql_abstract->select($table_list, $column, $clause);
 
 ## Methods
 
-CellBIS::SQL::Abstract inherit from L<Mojo::Base>.
+`CellBIS::SQL::Abstract` inherit from [Mojo::Base](https://metacpan.org/pod/Mojo::Base).
 Methods `insert`, `update`, `select`, and `select_join` can use **prepare statement** or **not**.
 
 The following are the methods available from this module:
