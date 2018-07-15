@@ -2,6 +2,13 @@ Revision history for perl distribution CellBIS-SQL-Abstract
 
 {{$NEXT}}
 
+
+0.6       2018-07-15 18:42:25+08:00 Asia/Makassar
+          - Added method create_table
+          - Fixed bugs query
+          - Fixed Documentation
+          - Update README.md
+
 0.5       2018-07-07 10:05:29+08:00 Asia/Makassar
           Abstract.pm - Remove "say" on subroutine "select"
 
