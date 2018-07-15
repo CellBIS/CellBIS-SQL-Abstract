@@ -62,7 +62,7 @@ $sql_abstract->select($table_name, $column, $clause);
 my $table_list = []; # List of table. (array ref data type)
 my $column = []; # List of column to select. (array ref data type)
 my $clause = {}; # Clause of SQL Query.
-$sql_abstract->select($table_list, $column, $clause);
+$sql_abstract->select_join($table_list, $column, $clause);
 ```
 
 ## Methods
