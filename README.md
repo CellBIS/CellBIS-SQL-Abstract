@@ -21,7 +21,7 @@ cpan -i CellBIS::SQL::Abstract
 ```
 with `cpanm` command :
 ```bash
-cpanm -i CellBIS::SQL::Abstract
+cpanm CellBIS::SQL::Abstract
 ```
 
 ## Synopsis Module :
