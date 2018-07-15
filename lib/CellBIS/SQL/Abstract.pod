@@ -223,7 +223,7 @@ SQL equivalent :
   my $update_no_pre_st = $sql_abstract->update($table_name, $column, $value, $clause);
 
   # IF Prepare Statement
-  my $update_no_pre_st = $sql_abstract->update($table_name, $column, $value, $clause, 'pre-st');
+  my $update = $sql_abstract->update($table_name, $column, $value, $clause, 'pre-st');
 
 SQL equivalent :
 
