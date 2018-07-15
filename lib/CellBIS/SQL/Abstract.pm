@@ -33,15 +33,14 @@ sub insert {
   if ((scalar @table_field) == (scalar @table_data)) {
     
     if ($type && $type eq 'no-pre-st') {
-      $value_col = join ', ', @table_data;
+      $value_col = join ', ', $self->QueryUtil->replace_data_value_insert_no_pre_st(\@table_data);
     }
     elsif ($type && $type eq 'pre-st') {
       @get_data_value = $self->QueryUtil->replace_data_value_insert(\@table_data);
       $value_col = join ', ', @get_data_value;
     }
     else {
-      @get_data_value = $self->QueryUtil->replace_data_value_insert(\@table_data);
-      $value_col = join ', ', @get_data_value;
+      $value_col = join ', ', $self->QueryUtil->replace_data_value_insert_no_pre_st(\@table_data);
     }
     
     $field_col = trim($field_col);
@@ -89,9 +88,9 @@ sub update {
     }
   }
   else {
-    $field_change = join '=?, ', @table_field;
-    $field_change .= '=?';
-    
+    my @get_value = $self->QueryUtil->col_with_val($column, $value);
+    $field_change = join ', ', @get_value;
+  
     if (exists $clause->{where}) {
       $where_clause = $self->QueryUtil->create_clause($clause);
       $data = "UPDATE $table_name \nSET $field_change \n$where_clause";
