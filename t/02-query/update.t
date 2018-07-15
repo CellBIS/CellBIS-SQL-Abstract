@@ -9,7 +9,12 @@ use lib "$FindBin::Bin/../../lib";
 use CellBIS::SQL::Abstract;
 
 my $sql_abstract = CellBIS::SQL::Abstract->new();
+my $to_compare = '';
 
+$to_compare =
+  'UPDATE table_test SET clause_col1=?, col2=?, col3=? '.
+  'WHERE clause_col1 = ? AND clause_col2 = ? OR clause_col3 = ? '.
+  'ORDER BY col1 ASC LIMIT 1';
 my $update = $sql_abstract->update(
   'table_test',
   [ 'clause_col1', 'col2', 'col3' ],
@@ -20,10 +25,12 @@ my $update = $sql_abstract->update(
     'order'   => 'asc', # asc || desc
     'limit'   => '1'
   });
-ok($update eq 'UPDATE table_test SET clause_col1=?, col2=?, col3=? '.
-  'WHERE clause_col1 = ? AND clause_col2 = ? OR clause_col3 = ? '.
-  'ORDER BY col1 ASC LIMIT 1', "SQL Query [$update] is true");
+is($sql_abstract->to_one_liner($update), $to_compare, "SQL Query : \n$update");
 
+$to_compare =
+  'UPDATE table_test SET clause_col1=?, col2=?, col3=? '.
+  'WHERE clause_col1 = ? AND clause_col2 = ? OR clause_col3 = ? '.
+  'ORDER BY col1 ASC';
 $update = $sql_abstract->update(
   'table_test',
   [ 'clause_col1', 'col2', 'col3' ],
@@ -33,10 +40,11 @@ $update = $sql_abstract->update(
     'orderby' => 'col1',
     'order'   => 'asc', # asc || desc
   });
-ok($update eq 'UPDATE table_test SET clause_col1=?, col2=?, col3=? '.
-  'WHERE clause_col1 = ? AND clause_col2 = ? OR clause_col3 = ? '.
-  'ORDER BY col1 ASC', "SQL Query [$update] is true");
+is($sql_abstract->to_one_liner($update), $to_compare, "SQL Query : \n$update");
 
+$to_compare =
+  'UPDATE table_test SET clause_col1=?, col2=?, col3=? '.
+  'WHERE clause_col1 = ? AND clause_col2 = ? OR clause_col3 = ?';
 $update = $sql_abstract->update(
   'table_test',
   [ 'clause_col1', 'col2', 'col3' ],
@@ -44,8 +52,6 @@ $update = $sql_abstract->update(
   {
     'where'   => 'clause_col1 = ? AND clause_col2 = ? OR clause_col3 = ?',
   });
-ok($update eq 'UPDATE table_test SET clause_col1=?, col2=?, col3=? '.
-  'WHERE clause_col1 = ? AND clause_col2 = ? OR clause_col3 = ?', "SQL Query [$update] is true");
+is($sql_abstract->to_one_liner($update), $to_compare, "SQL Query : \n$update");
 
 done_testing();
-
