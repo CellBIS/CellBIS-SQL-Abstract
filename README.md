@@ -4,7 +4,7 @@ The purpose of this module is to generate SQL Query. General queries has covered
 `insert`, `delete`, `update`, `select`, and **select** with **join** - (`select_join`).
 And the additional query has covered to create table
 
-You can you this module for [Mojo::mysql](https://metacpan.org/pod/Mojo::mysql) 
+You can use this module for [Mojo::mysql](https://metacpan.org/pod/Mojo::mysql) 
 or [DBI](https://metacpan.org/pod/DBI).
 
 ## How to Install :
