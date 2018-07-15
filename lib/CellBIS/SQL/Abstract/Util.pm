@@ -39,9 +39,9 @@ sub for_onjoin {
     my $get_table_data = '';
     
     # For "FROM TABLE"
-    $data = "FROM $get_primaryTbl[0]->{name}";
+    $data = "\nFROM $get_primaryTbl[0]->{name}";
     if (exists $get_primaryTbl[0]->{alias}) {
-      $data = "FROM $get_primaryTbl[0]->{name} AS $get_primaryTbl[0]->{alias}";
+      $data = "\nFROM $get_primaryTbl[0]->{name} AS $get_primaryTbl[0]->{alias}";
     }
     
     my $i = 0;
@@ -84,7 +84,7 @@ sub create_clause {
     $data .= ' ORDER BY ' . $clause->{'orderby'};
   }
   if (exists $clause->{'orderby'} and exists $clause->{'groupby'}) {
-    $data .= 'GROUP BY ' . $clause->{'groupby'} . ' ORDER BY ' . $clause->{'orderby'};
+    $data .= ' GROUP BY ' . $clause->{'groupby'} . ' ORDER BY ' . $clause->{'orderby'};
   }
   if (exists $clause->{'order'} and exists $clause->{orderby}) {
     $data .= ' ' . (uc $clause->{'order'});
