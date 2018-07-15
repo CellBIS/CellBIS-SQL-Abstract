@@ -4,6 +4,7 @@ use Mojo::Base -base;
 use Scalar::Util qw(blessed);
 use Mojo::Util qw(trim);
 use CellBIS::SQL::Abstract::Util;
+use CellBIS::SQL::Abstract::Table;
 
 # ABSTRACT: SQL Abstract
 our $VERSION = '0.5';
@@ -74,7 +75,7 @@ sub update {
     
     if (exists $clause->{where}) {
       $where_clause = $self->QueryUtil->create_clause($clause);
-      $data = "UPDATE $table_name SET $field_change" . $where_clause;
+      $data = "UPDATE $table_name \nSET $field_change \n$where_clause";
     }
     
   }
@@ -84,7 +85,7 @@ sub update {
     
     if (exists $clause->{where}) {
       $where_clause = $self->QueryUtil->create_clause($clause);
-      $data = "UPDATE $table_name SET $field_change" . $where_clause;
+      $data = "UPDATE $table_name \nSET $field_change \n$where_clause";
     }
   }
   else {
@@ -93,7 +94,7 @@ sub update {
     
     if (exists $clause->{where}) {
       $where_clause = $self->QueryUtil->create_clause($clause);
-      $data = "UPDATE $table_name SET $field_change" . $where_clause;
+      $data = "UPDATE $table_name \nSET $field_change \n$where_clause";
     }
   }
   return $data;
@@ -110,7 +111,7 @@ sub delete {
     #    my $size_clause = scalar keys %{$clause};
     if (exists $clause->{where}) {
       my $where_clause = $self->QueryUtil->create_clause($clause);
-      $data = "DELETE FROM $table_name" . $where_clause;
+      $data = "DELETE FROM $table_name \n$where_clause";
     }
   }
   return $data;
@@ -138,6 +139,20 @@ sub select_join {
   return $data;
 }
 
+# For Create Table :
+# ------------------------------------------------------------------------
+sub create_table {
+  my $self = shift;
+  my $arg_len = scalar @_;
+  my $result = '';
+  
+  if ($arg_len >= 3) {
+    my $tables = CellBIS::SQL::Abstract::Table->new();
+    $result = $tables->create_query_table(@_);
+  }
+  return $result;
+}
+
 # For Action Query String - "select" - arg3 :
 # ------------------------------------------------------------------------
 sub _qSelect_arg3 {
@@ -156,10 +171,10 @@ sub _qSelect_arg3 {
     if ($size_clause != 0) {
       $where_clause = $self->QueryUtil->create_clause($clause);
       if (scalar @col == 0) {
-        $data = 'SELECT * FROM '.$table_name . $where_clause;
+        $data = 'SELECT * FROM '.$table_name . "\n" . $where_clause;
       } else {
         $field_change = ref($column) eq "ARRAY" ? (join ', ', @col) : '*';
-        $data = 'SELECT '. $field_change . ' FROM '. $table_name . $where_clause;
+        $data = 'SELECT '. $field_change . " \nFROM ". $table_name . "\n" . $where_clause;
       }
       
     }
@@ -203,7 +218,7 @@ sub _qSelectJoin_arg3 {
     if (exists $clause->{join}) {
       $join_clause = $self->QueryUtil->for_onjoin($clause, $table_name);
       $where_clause = $self->QueryUtil->create_clause($clause);
-      $data = "SELECT $field_change $join_clause" . $where_clause;
+      $data = "SELECT $field_change $join_clause" . "\n" . $where_clause;
     }
     else {
       $where_clause = $self->QueryUtil->create_clause($clause);
@@ -216,28 +231,13 @@ sub _qSelectJoin_arg3 {
   return $data;
 }
 
+sub to_one_liner {
+  my ($self, $result) = @_;
+  
+  $result =~ s/\t+//g;
+  $result =~ s/\,\s+/\, /g;
+  $result =~ s/\s+/ /g;
+  return $result;
+}
+
 1;
-
-=encoding utf8
-
-=head1 NAME
-
-CellBIS::SQL::Abstract - SQL Abstract
-
-=head1 DESCRIPTION
-
-The purpose of this module is to support SQL abstraction in L<Mojo::mysql>.
-This module inherits from L<Mojo::Base>
-
-=head1 AUTHOR
-
-Achmad Yusri Afandi, E<lt>yusrideb@cpan.orgE<gt>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) 2018 by Achmad Yusri Afandi
-
-This program is free software, you can redistribute it and/or modify it under the terms of
-the Artistic License version 2.0.
-
-=cut
