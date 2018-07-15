@@ -6,7 +6,7 @@ use Mojo::Util qw(trim);
 use CellBIS::SQL::Abstract::Util;
 use CellBIS::SQL::Abstract::Table;
 
-# ABSTRACT: SQL Abstract
+# ABSTRACT: SQL Query Generator
 our $VERSION = '0.6';
 
 has 'QueryUtil' => sub { state $qu = CellBIS::SQL::Abstract::Util->new };
