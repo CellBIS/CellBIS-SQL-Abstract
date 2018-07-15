@@ -57,7 +57,7 @@ sub for_onjoin {
       if (exists $get_table_data->{alias}) {
         $tbl_alias = $get_table_data->{alias};
         $data .= " $type_join $tbl_name AS $tbl_alias ";
-        $data .= 'ON ' if ($i > 1 or $i <= ($size_join - 1));
+        $data .= "\nON " if ($i > 1 or $i <= ($size_join - 1));
         $data .= join " = ", @$table_join;
       }
       else {
@@ -78,13 +78,13 @@ sub create_clause {
   my ($self, $clause) = @_;
   my $data = '';
   if (exists $clause->{'where'}) {
-    $data .= ' WHERE ' . $clause->{'where'};
+    $data .= 'WHERE ' . $clause->{'where'};
   }
   if (exists $clause->{'orderby'} and not exists $clause->{'groupby'}) {
     $data .= ' ORDER BY ' . $clause->{'orderby'};
   }
   if (exists $clause->{'orderby'} and exists $clause->{'groupby'}) {
-    $data .= ' GROUP BY ' . $clause->{'groupby'} . ' ORDER BY ' . $clause->{'orderby'};
+    $data .= 'GROUP BY ' . $clause->{'groupby'} . ' ORDER BY ' . $clause->{'orderby'};
   }
   if (exists $clause->{'order'} and exists $clause->{orderby}) {
     $data .= ' ' . (uc $clause->{'order'});
@@ -101,8 +101,8 @@ sub type_join {
   my ($self, $type) = @_;
   
   my %data_type = (
-    'left'  => 'LEFT JOIN',
-    'inner' => 'INNER JOIN',
+    'left'  => "\nLEFT JOIN",
+    'inner' => "\nINNER JOIN",
   );
   return $data_type{$type} if exists $data_type{$type};
 }
