@@ -10,7 +10,7 @@ or [DBI](https://metacpan.org/pod/DBI).
 ## How to Install :
 From Source :
 ```bash
-git clone -b v0.6 git@github.com:CellBIS/CellBIS-SQL-Abstract.git
+git clone -b v0.7 git@github.com:CellBIS/CellBIS-SQL-Abstract.git
 perl Makefile.PL
 make && make test
 make install && make clean
