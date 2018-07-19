@@ -1,3 +1,4 @@
+
 =pod
 
 =encoding utf8
@@ -11,6 +12,9 @@ CellBIS::SQL::Abstract - SQL Query Generator
   use CellBIS::SQL::Abstract
 
   my $sql_abstract = CellBIS::SQL::Abstract->new;
+
+  # IF create table SQLite
+  my $sql_abstract = CellBIS::SQL::Abstract->new(db_type => 'sqlite');
 
   # Create Table
   my $table_name = 'my_table_name'; # Table name.
@@ -66,10 +70,8 @@ The following are the methods available from this module:
 =head2 create_table - MariaDB/MySQL
 
   use CellBIS::SQL::Abstract
-  my $sql_abstract;
 
-  # For MariaDB/MySQL
-  $sql_abstract = CellBIS::SQL::Abstract->new;
+  my $sql_abstract = CellBIS::SQL::Abstract->new;
 
   my $table_name = 'my_users';
   my $col_list = [ 'id', 'first_name', 'last_name', 'other_col_name' ];
@@ -108,7 +110,6 @@ The following are the methods available from this module:
 
 SQL equivalent :
 
-  # For MariaDB/MySQL
   CREATE TABLE IF NOT EXISTS users(
       id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
       first_name VARCHAR(50) NOT NULL,
@@ -118,10 +119,9 @@ SQL equivalent :
 
 =head2 create_table - SQLite
 
-  ############################################################################################
+  use CellBIS::SQL::Abstract
 
-  # For SQLite
-  $sql_abstract = CellBIS::SQL::Abstract->new(db_type => 'sqlite');
+  my $sql_abstract = CellBIS::SQL::Abstract->new(db_type => 'sqlite');
 
   my $table_name = 'my_users';
   my $col_list = [ 'id', 'first_name', 'last_name', 'other_col_name' ];
@@ -157,7 +157,6 @@ SQL equivalent :
 
 SQL equivalent :
 
-  # For SQLite
   CREATE TABLE IF NOT EXISTS users(
       id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
       first_name VARCHAR NOT NULL,
@@ -219,7 +218,6 @@ SQL equivalent :
 
 SQL equivalent :
 
-  # For MariaDB/MySQL
   CREATE TABLE IF NOT EXISTS company(
       id_company INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
       id_company_users INT(11) NOT NULL,
@@ -277,9 +275,8 @@ SQL equivalent :
 
 SQL equivalent :
 
-  # For SQLite
   CREATE TABLE IF NOT EXISTS company(
-      id_company INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+      id_company INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
       id_company_users INTEGER NOT NULL,
       company_name VARCHAR NOT NULL,
       CONSTRAINT user_company_fk FOREIGN KEY (id_company_users) REFERENCES users (id)
