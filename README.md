@@ -10,7 +10,7 @@ or [DBI](https://metacpan.org/pod/DBI).
 ## How to Install :
 From Source :
 ```bash
-git clone -b v0.7 git@github.com:CellBIS/CellBIS-SQL-Abstract.git
+git clone -b v0.8 git@github.com:CellBIS/CellBIS-SQL-Abstract.git
 perl Makefile.PL
 make && make test
 make install && make clean
@@ -28,6 +28,9 @@ cpanm CellBIS::SQL::Abstract
 ```perl
 use CellBIS::SQL::Abstract
 my $sql_abstract = CellBIS::SQL::Abstract->new;
+
+# For create table SQLite
+my $sql_abstract = CellBIS::SQL::Abstract->new(db_type => 'sqlite');
 
 # Create Table
 my $table_name = 'my_table_name'; # Table name.
@@ -68,11 +71,14 @@ $sql_abstract->select_join($table_list, $column, $clause);
 ## Methods
 
 `CellBIS::SQL::Abstract` inherit from [Mojo::Base](https://metacpan.org/pod/Mojo::Base).
-Methods `insert`, `update`, `select`, and `select_join` can use **prepare statement** or **not**.
+Methods `insert`, `update`, `select`, and `select_join`.
+
+`create_table` is additional method.
+Currently, only supports MariaDB/MySQL and SQLite Syntax
 
 The following are the methods available from this module:
 
-### create_table :
+### create_table - MariaDB/MySQL :
 ```perl
 use CellBIS::SQL::Abstract
 my $sql_abstract = CellBIS::SQL::Abstract->new;
@@ -112,7 +118,7 @@ my $col_attr = {
 };
 my $create_table = $sql_abstract->create_table($table_name, $col_list, $col_attr);
 ```
-This equivalent with :
+SQL Equivalent :
 ```mysql
 CREATE TABLE IF NOT EXISTS users(
     id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -122,7 +128,55 @@ CREATE TABLE IF NOT EXISTS users(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ```
 
-### create_table with Foreign key 
+### create_table - SQLite :
+```perl
+use CellBIS::SQL::Abstract
+
+my $sql_abstract = CellBIS::SQL::Abstract->new(db_type => 'sqlite');
+
+my $table_name = 'my_users';
+my $col_list = [ 'id', 'first_name', 'last_name', 'other_col_name' ];
+my $col_attr = {
+  'id'             => {
+    type          => { name => 'integer' },
+    is_primarykey => 1,
+    is_autoincre  => 1,
+  },
+  'first_name'     => {
+    type    => {
+      name => 'varchar',
+      size => 50,
+    },
+    is_null => 0,
+  },
+  'last_name'      => {
+    type    => {
+      name => 'varchar',
+      size => 50,
+    },
+    is_null => 0,
+  },
+  'other_col_name' => {
+    type    => {
+      name => 'varchar',
+      size => 60,
+    },
+    is_null => 0,
+  }
+};
+$create_table = $sql_abstract->create_table($table_name, $col_list, $col_attr);
+```
+SQL Equivalent :
+```sqlite
+CREATE TABLE IF NOT EXISTS users(
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  first_name VARCHAR NOT NULL,
+  last_name VARCHAR NOT NULL,
+  other_col_name VARCHAR(60) NOT NULL
+)
+```
+
+### create_table with Foreign key - MariaDB/MySQL
 ```perl
 use CellBIS::SQL::Abstract
 my $sql_abstract = CellBIS::SQL::Abstract->new;
@@ -173,7 +227,7 @@ my $table_attr = {
 };
 my $create_table = $sql_abstract->create_table($table_name, $col_list, $col_attr, $table_attr);
 ```
-This equivalent with :
+SQL Equivalent :
 ```mysql
 CREATE TABLE IF NOT EXISTS company(
     id_company INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -183,6 +237,63 @@ CREATE TABLE IF NOT EXISTS company(
     CONSTRAINT user_company_fk FOREIGN KEY (id_company_users) REFERENCES users (id)
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+
+### create_table with Foreign key - SQLite
+```perl
+use CellBIS::SQL::Abstract
+
+my $sql_abstract = CellBIS::SQL::Abstract->new(db_type => 'sqlite');
+
+my $table_name = 'my_companies';
+my $col_list = [
+  'id_company',
+  'id_company_users',
+  'company_name',
+];
+my $col_attr = {
+  'id_company'       => {
+    type          => { name => 'integer' },
+    is_primarykey => 1,
+    is_autoincre  => 1,
+  },
+  'id_company_users' => {
+    type    => { name => 'integer' },
+    is_null => 0,
+  },
+  'company_name'     => {
+    type    => {
+      name => 'varchar',
+      size => '200',
+    },
+    is_null => 0,
+  }
+};
+my $table_attr = {
+  fk      => {
+    name         => 'user_companies_fk',
+    col_name     => 'id_company_users',
+    table_target => 'users',
+    col_target   => 'id',
+    attr         => {
+      onupdate => 'cascade',
+      ondelete => 'cascade'
+    }
+  },
+  charset => 'utf8',
+  engine  => 'innodb',
+};
+$create_table = $sql_abstract->create_table($table_name, $col_list, $col_attr, $table_attr);
+```
+SQL Equivalent :
+```sqlite
+CREATE TABLE IF NOT EXISTS company(
+  id_company INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  id_company_users INTEGER NOT NULL,
+  company_name VARCHAR NOT NULL,
+  CONSTRAINT user_company_fk FOREIGN KEY (id_company_users) REFERENCES users (id)
+  ON DELETE CASCADE ON UPDATE CASCADE
+)
 ```
 
 ### insert
