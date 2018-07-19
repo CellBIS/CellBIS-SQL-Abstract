@@ -55,14 +55,14 @@ CellBIS::SQL::Abstract - SQL Query Generator
 
 The purpose of this module is to generate SQL Query. General queries has covered
 C<insert>, C<delete>, C<update>, C<select>, and B<select> with B<join> - (C<select_join>).
-And the additional query has covered to create table
+And the additional query has covered to create table.
 
 =head1 METHODS
 
-CellBIS::SQL::Abstract inherit from L<Mojo::Base>.
-Methods C<insert>, C<update>, C<select>, and C<select_join>.
+L<CellBIS::SQL::Abstract> inherits all methods from L<Mojo::Base>.
+General methods available for C<insert>, C<update>, C<select>, and C<select_join>.
 
-C<create_table> is additional method.
+For additional method, only available for C<create_table>.
 Currently, only supports MariaDB/MySQL and SQLite Syntax
 
 The following are the methods available from this module:
