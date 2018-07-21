@@ -2,10 +2,6 @@
 use strict;
 use warnings;
 use Test::More;
-
-use FindBin;
-use lib "$FindBin::Bin/../../lib";
-
 use CellBIS::SQL::Abstract;
 
 my $sql_abstract = CellBIS::SQL::Abstract->new();
