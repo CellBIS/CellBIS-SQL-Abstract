@@ -117,7 +117,7 @@ sub replace_data_value_insert {
   my ($data_value) = @_;
 
   my @data = @{$data_value};
-  my @result = map { $_ eq 'NOW()' ? 'NOW()' : '?' } @data;
+  my @result = map { $_ =~ qr/(date|datetime|now|NOW)/ ? $_ : '?' } @data;
   @result = grep (defined, @result);
   return @result;
 }
@@ -129,7 +129,8 @@ sub replace_data_value_insert_no_pre_st {
   my ($data_value) = @_;
 
   my @data = @{$data_value};
-  my @result = map { "'" . $_ . "'" } @data;
+  my @result
+    = map { $_ =~ qr/(date|datetime|now|NOW)/ ? $_ : "'" . $_ . "'" } @data;
   @result = grep (defined, @result);
   return @result;
 }
