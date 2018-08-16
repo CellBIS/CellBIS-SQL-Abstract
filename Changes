@@ -3,6 +3,11 @@ Revision history for perl distribution CellBIS-SQL-Abstract
 {{$NEXT}}
 
 
+1.1       2018-08-17 04:47:54+08:00 Asia/Makassar
+          Improve method "update" on "Abstract.pm"
+          for support use argument with hashref datatype
+          for column and value
+
 1.0       2018-08-17 00:21:04+08:00 Asia/Makassar
           Fixed part of query generator to support SQL datetime format
 
