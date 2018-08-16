@@ -113,4 +113,21 @@ $update = $sql_abstract->update(
 is($sql_abstract->to_one_liner($update),
   $to_compare, "SQL Query No Prepare Statement : \n$update");
 
+
+# with 3 argument
+$update = $sql_abstract->update(
+  'table_test',
+  {'clause_col1' => 'val1', 'col2' => 'val2', 'col3' => 'val3'},
+  {
+    'where' =>
+      "clause_col1 = 'clause_val1' AND clause_col2 = 'clause_val2' OR clause_col3 = 'clause_val3'",
+  }
+);
+like(
+  $sql_abstract->to_one_liner($update),
+  qr/UPDATE(.*)SET(.*)\=(.*)WHERE(.*)/,
+  "SQL Query : \n$update"
+);
+
+
 done_testing();
