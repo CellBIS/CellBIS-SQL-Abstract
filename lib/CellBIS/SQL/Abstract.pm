@@ -2,6 +2,7 @@ package CellBIS::SQL::Abstract;
 use Mojo::Base -base;
 
 use Scalar::Util qw(blessed);
+use Carp ();
 use Mojo::Util qw(trim);
 use CellBIS::SQL::Abstract::Util;
 use CellBIS::SQL::Abstract::Table;
@@ -62,45 +63,14 @@ sub insert {
 sub update {
   my $self    = shift;
   my $arg_len = scalar @_;
-  my ($table_name, $column, $value, $clause, $type);
-  my $data = '';
 
-  ($table_name, $column, $value, $clause) = @_ if $arg_len == 4;
-  ($table_name, $column, $value, $clause, $type) = @_ if $arg_len >= 5;
-
-  my @table_field  = @{$column};
-  my $field_change = '';
-  my $where_clause = '';
-
-  if ($type && $type eq 'no-pre-st') {
-    my @get_value = $self->QueryUtil->col_with_val($column, $value);
-    $field_change = join ', ', @get_value;
-
-    if (exists $clause->{where}) {
-      $where_clause = $self->QueryUtil->create_clause($clause);
-      $data         = "UPDATE $table_name \nSET $field_change \n$where_clause";
-    }
-
-  }
-  elsif ($type && $type eq 'pre-st') {
-    $field_change = join '=?, ', @table_field;
-    $field_change .= '=?';
-
-    if (exists $clause->{where}) {
-      $where_clause = $self->QueryUtil->create_clause($clause);
-      $data         = "UPDATE $table_name \nSET $field_change \n$where_clause";
+  if ($arg_len > 2 || $arg_len >= 5) {
+    my $method_name = '_qUpdate_arg' . $arg_len;
+    if ($self->can($method_name)) {
+      return $self->$method_name(@_);
     }
   }
-  else {
-    my @get_value = $self->QueryUtil->col_with_val($column, $value);
-    $field_change = join ', ', @get_value;
-
-    if (exists $clause->{where}) {
-      $where_clause = $self->QueryUtil->create_clause($clause);
-      $data         = "UPDATE $table_name \nSET $field_change \n$where_clause";
-    }
-  }
-  return $data;
+  return '';
 }
 
 # For Query Delete :
@@ -156,6 +126,73 @@ sub create_table {
     $result = $tables->create_query_table(@_);
   }
   return $result;
+}
+
+sub _qUpdate_arg3 {
+  my $self = shift;
+  my ($table_name, $col_val, $clause) = @_;
+  my $data = '';
+
+  Carp::croak '$col_val is must be hashref datatype'
+    unless ref $col_val eq "HASH";
+
+  if (exists $clause->{where}) {
+    my @field = map {
+          $col_val->{$_} =~ qr/date|datetime|now|NOW/
+        ? $_ . ' = ' . $col_val->{$_}
+        : $_ . ' = ' . "'"
+        . $col_val->{$_} . "'"
+    } keys %{$col_val};
+    my $field_change = join ', ', @field;
+    my $where_clause = $self->QueryUtil->create_clause($clause);
+    $data = "UPDATE $table_name \nSET $field_change \n$where_clause";
+  }
+  return $data;
+}
+
+sub _qUpdate_arg4 {
+  my $self = shift;
+  my ($table_name, $column, $value, $clause) = @_;
+  my $data = '';
+
+  if (exists $clause->{where}) {
+    my @get_value = $self->QueryUtil->col_with_val($column, $value);
+    my $field_change = join ', ', @get_value;
+    my $where_clause = $self->QueryUtil->create_clause($clause);
+    $data = "UPDATE $table_name \nSET $field_change \n$where_clause";
+  }
+  return $data;
+}
+
+sub _qUpdate_arg5 {
+  my $self = shift;
+  my ($table_name, $column, $value, $clause, $type) = @_;
+  my $data = '';
+
+  my @table_field  = @{$column};
+  my $field_change = '';
+  my $where_clause = '';
+
+  if ($type && $type eq 'no-pre-st') {
+
+    if (exists $clause->{where}) {
+      my @get_value = $self->QueryUtil->col_with_val($column, $value);
+      $field_change = join ', ', @get_value;
+      $where_clause = $self->QueryUtil->create_clause($clause);
+      $data         = "UPDATE $table_name \nSET $field_change \n$where_clause";
+    }
+
+  }
+  else {
+
+    if (exists $clause->{where}) {
+      $field_change = join '=?, ', @table_field;
+      $field_change .= '=?';
+      $where_clause = $self->QueryUtil->create_clause($clause);
+      $data         = "UPDATE $table_name \nSET $field_change \n$where_clause";
+    }
+  }
+  return $data;
 }
 
 # For Action Query String - "select" - arg3 :
