@@ -1,4 +1,4 @@
-# CellBIS::SQL::Abstract - SQL Query Generator
+# CellBIS::SQL::Abstract - SQL Query Generator [![Build Status](https://travis-ci.com/CellBIS/CellBIS-SQL-Abstract.svg?branch=master)](https://travis-ci.com/CellBIS/CellBIS-SQL-Abstract)
 
 The purpose of this module is to generate SQL Query. General queries has covered
 `insert`, `delete`, `update`, `select`, and **select** with **join** - (`select_join`).
