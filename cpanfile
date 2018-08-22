@@ -1,5 +1,6 @@
 requires "Mojolicious" => "0";
 requires "Scalar::Util" => "0";
+requires "Hash::MultiValue" => "0";
 
 on 'build' => sub {
   requires "Module::Build" => "0.28";
