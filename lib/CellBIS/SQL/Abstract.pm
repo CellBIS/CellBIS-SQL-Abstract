@@ -11,7 +11,7 @@ use CellBIS::SQL::Abstract::Table;
 our $VERSION = '1.3';
 
 has 'QueryUtil' => sub { state $qu = CellBIS::SQL::Abstract::Util->new };
-has 'db_type';
+has 'db_type'   => 'mysql';
 
 # For Query Insert :
 # ------------------------------------------------------------------------
@@ -121,8 +121,7 @@ sub create_table {
   my $result  = '';
 
   if ($arg_len >= 3) {
-    my $tables = CellBIS::SQL::Abstract::Table->new(db_type => $self->db_type
-        // 'mysql');
+    my $tables = CellBIS::SQL::Abstract::Table->new(db_type => $self->db_type);
     $result = $tables->create_query_table(@_);
   }
   return $result;
