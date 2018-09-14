@@ -375,27 +375,24 @@ sub create_query_table {
     if (exists $table_attr->{attr} and $table_attr->{attr} ne '') {
       if ($size_fk == 1) {
         $attr_table = $table_attr->{attr};
-        $data .= $db_type eq 'sqlite' ? " \n)" : ") $attr_table";
+        $data .= $db_type eq 'sqlite'
+          || $db_type eq 'pg' ? " \n)" : ") $attr_table";
       }
       else {
-        $data
-          .= $db_type eq 'sqlite'
-          ? " \n)"
-          : ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
+        $data .= $db_type eq 'sqlite'
+          || $db_type eq 'pg' ? " \n)" : ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
       }
     }
     else {
-      $data
-        .= $db_type eq 'sqlite'
-        ? " \n)"
-        : ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
+      $data .= $db_type eq 'sqlite'
+        || $db_type eq 'pg' ? " \n)" : ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
     }
 
   }
   else {
     $data .= "$list_column\n";
-    $data
-      .= $db_type eq 'sqlite' ? ")" : ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
+    $data .= $db_type eq 'sqlite'
+      || $db_type eq 'pg' ? ")" : ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
   }
   return $data;
 }
