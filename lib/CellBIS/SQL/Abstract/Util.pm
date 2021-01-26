@@ -29,7 +29,7 @@ sub for_onjoin {
   my $size_join = @{$join};
 
   my @table_list     = @{$table_name};
-  my %list_table     = map { $_->{name} => $_ } @{$table_name};
+  my %list_table     = map  { $_->{name} => $_ } @{$table_name};
   my @get_primaryTbl = grep { $_->{primary} && $_->{primary} == 1 } @table_list;
   @get_primaryTbl = @get_primaryTbl ? @get_primaryTbl : ($table_list[0]);
 
@@ -116,8 +116,8 @@ sub replace_data_value_insert {
   my $self = shift;
   my ($data_value) = @_;
 
-  my @data = @{$data_value};
-  my @result = map { $_ =~ qr/(date|datetime|now|NOW)/ ? $_ : '?' } @data;
+  my @data   = @{$data_value};
+  my @result = map { $self->is_sql_function($_) ? $_->[0] : '?' } @data;
   @result = grep (defined, @result);
   return @result;
 }
@@ -130,14 +130,21 @@ sub replace_data_value_insert_no_pre_st {
 
   my @data   = @{$data_value};
   my @result = map {
-    $_ =~ qr/(date|datetime|now|NOW)/    # for match date/datetime function
-      ? $_                               # if defined
-        ? '\'' . $_ . '\''               # true condition
-        : ""                             # false condition
-      : "'" . $_ . "'"                   # if not date function.
+    $self->is_sql_function($_)    # for match sql function
+      ? $_                        # if defined
+        ? '\'' . $_->[0] . '\''    # true condition
+        : ""                       # false condition
+      : "'" . $_ . "'"             # if not date function.
   } @data;
   @result = grep (defined, @result);
   return @result;
+}
+
+# For check if function sql
+sub is_sql_function {
+  my ($self, $string) = @_;
+
+  return ref($string) eq 'ARRAY' ? 1 : 0;
 }
 
 1;

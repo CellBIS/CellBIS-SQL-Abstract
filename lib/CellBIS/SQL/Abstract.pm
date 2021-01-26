@@ -11,7 +11,7 @@ use CellBIS::SQL::Abstract::Table;
 our $VERSION = '1.3';
 
 has 'QueryUtil' => sub { state $qu = CellBIS::SQL::Abstract::Util->new };
-has 'db_type'   => 'mysql';
+has 'db_type'   => 'mariadb';
 
 # For Query Insert :
 # ------------------------------------------------------------------------
@@ -121,7 +121,8 @@ sub create_table {
   my $result  = '';
 
   if ($arg_len >= 3) {
-    my $tables = CellBIS::SQL::Abstract::Table->new(db_type => $self->db_type);
+    state $tables
+      = CellBIS::SQL::Abstract::Table->new(db_type => $self->db_type);
     $result = $tables->create_query_table(@_);
   }
   return $result;
@@ -130,6 +131,7 @@ sub create_table {
 sub _qUpdate_arg3 {
   my $self = shift;
   my ($table_name, $col_val, $clause) = @_;
+
   my $data = '';
 
   Carp::croak '$col_val is must be hashref datatype'
@@ -137,8 +139,8 @@ sub _qUpdate_arg3 {
 
   if (exists $clause->{where}) {
     my @field = map {
-          $col_val->{$_} =~ qr/date|datetime|now|NOW/
-        ? $_ . ' = ' . $col_val->{$_}
+          $self->QueryUtil->is_sql_function($col_val->{$_})
+        ? $_ . ' = ' . $col_val->{$_}->[0]
         : $_ . ' = ' . "'"
         . $col_val->{$_} . "'"
     } keys %{$col_val};
@@ -155,7 +157,7 @@ sub _qUpdate_arg4 {
   my $data = '';
 
   if (exists $clause->{where}) {
-    my @get_value = $self->QueryUtil->col_with_val($column, $value);
+    my @get_value    = $self->QueryUtil->col_with_val($column, $value);
     my $field_change = join ', ', @get_value;
     my $where_clause = $self->QueryUtil->create_clause($clause);
     $data = "UPDATE $table_name \nSET $field_change \n$where_clause";
@@ -265,7 +267,7 @@ sub _qSelectJoin_arg3 {
 
   if (ref($clause) eq "HASH") {
     if (exists $clause->{join}) {
-      $join_clause = $self->QueryUtil->for_onjoin($clause, $table_name);
+      $join_clause  = $self->QueryUtil->for_onjoin($clause, $table_name);
       $where_clause = $self->QueryUtil->create_clause($clause);
       $data = "SELECT $field_change $join_clause" . "\n" . $where_clause;
     }
