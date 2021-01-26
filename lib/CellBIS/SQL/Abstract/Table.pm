@@ -29,7 +29,7 @@ sub fk_validator {
   if (exists $fk->{col_target} && $fk->{col_target} ne '') {
     $fk_attr{col_target} = 1;
   }
-  my @r_val = grep { !$_ } values %fk_attr;
+  my @r_val       = grep { !$_ } values %fk_attr;
   my $size_result = scalar @r_val;
 
   if ($size_result >= 1) {
@@ -51,8 +51,8 @@ sub fk_validator {
 # ------------------------------------------------------------------------
 sub fk_attr_validator {
   my ($fk_table) = @_;
-  my $data = '';
-  my %ondelup = ('cascade' => 'CASCADE', 'null' => 'SET NULL',
+  my $data       = '';
+  my %ondelup    = ('cascade' => 'CASCADE', 'null' => 'SET NULL',
     'default' => 'SET DEFAULT');
   my $ondel = 0;
   if (exists $fk_table->{ondelete}) {
@@ -103,7 +103,8 @@ sub table_attr_val {
           unless $fk_attr eq '';
       }
       else {
-        $table_fk .= "\tKEY " . $fk_name . " ($col_name), \n";
+        $table_fk .= "\tKEY " . $fk_name . " ($col_name), \n"
+          if $db_type eq 'mariadb';
         $table_fk .= "\tCONSTRAINT $fk_name ";
         $table_fk .= "FOREIGN KEY ($col_name) ";
         $table_fk .= "REFERENCES $table_target ($col_target)\n"
@@ -162,6 +163,7 @@ sub table_col_attr_val {
     my $col_name     = '';
     my $curr_colAttr = {};
     my $new_colAttr  = Hash::MultiValue->new(%{$col_attr});
+
     while ($i < $until) {
       $col_name = $col_attr->{$col_list->[$i]};
       if (exists $col_name->{'is_autoincre'}) {
@@ -341,7 +343,7 @@ sub create_query_table {
     $size_tblAttr = scalar keys %{$table_attr};
   }
 
-  $col_attr = $self->table_col_attr_val($col_list, $col_attr);
+  $col_attr   = $self->table_col_attr_val($col_list, $col_attr);
   $table_attr = $self->table_attr_val($col_attr, $table_attr);
 
   my $size_col = scalar @{$col_list};
