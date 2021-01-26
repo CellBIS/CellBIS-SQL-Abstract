@@ -4,7 +4,7 @@ use warnings;
 use Test::More;
 use CellBIS::SQL::Abstract;
 
-my $sql_abstract = CellBIS::SQL::Abstract->new();
+my $sql_abstract = CellBIS::SQL::Abstract->new(db_type => 'mariadb');
 my $create_table = '';
 my $to_compare
   = 'CREATE TABLE IF NOT EXISTS company( '
