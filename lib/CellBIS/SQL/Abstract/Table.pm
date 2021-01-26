@@ -6,7 +6,7 @@ use Scalar::Util qw(blessed);
 use Mojo::Util qw(trim);
 use Hash::MultiValue;
 
-has 'db_type' => 'mysql';
+has 'db_type' => 'mariadb';
 
 # For Foreign Key Validator:
 # ------------------------------------------------------------------------
@@ -79,7 +79,7 @@ sub table_attr_val {
   my ($col_attr, $table_attr) = @_;
   my $new_tblAttr  = {};
   my $attrib_table = '';
-  my $db_type      = $self->db_type // 'mysql';
+  my $db_type      = $self->db_type // 'mariadb';
 
   if (exists $table_attr->{fk}) {
     $table_attr = fk_validator($table_attr, $col_attr);
