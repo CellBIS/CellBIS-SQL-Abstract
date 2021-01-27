@@ -389,7 +389,7 @@ SQL equivalent :
       company_name VARCHAR(200) NOT NULL,
       CONSTRAINT user_company_fk FOREIGN KEY (id_company_users) REFERENCES users (id)
       ON DELETE CASCADE ON UPDATE CASCADE
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+  )
 
 =head2 insert
 
