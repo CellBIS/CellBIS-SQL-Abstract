@@ -8,6 +8,8 @@ jobs:
         image: mariadb:10.3
         env:
           MYSQL_ROOT_PASSWORD: password
+          MYSQL_USER: mycsa
+          MYSQL_PASSWORD: mycsa
           MYSQL_DATABASE: csa_test
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         ports:
@@ -34,14 +36,15 @@ jobs:
         run: cpanm -n App::cpanminus ExtUtils::MakeMaker
       - name: Install dependencies
         run: |
-          cpanm -n --installdeps .
+          cpanm -n DBI DBD::MariaDB
           cpanm -n Test::Pod Test::Pod::Coverage Mojo::SQLite Mojo::mysql Mojo::Pg
+          cpanm -n .
       - name: Run tests
         run: prove -lvr
         env:
           HARNESS_OPTIONS: j3
           TEST_FOR: 500
-          TEST_ONLINE_mariadb: mariadb://root:password@mysql:3306/csa_test
+          TEST_ONLINE_mariadb: mariadb://mycsa:mycsa@mysql:3306/csa_test
           TEST_ONLINE_pg: postgresql://postgres:postgres@postgres:5432/csa_test
           TEST_POD: 1
           TEST_PUBSUB: 1
