@@ -13,8 +13,6 @@ our $VERSION = '1.3';
 has 'QueryUtil' => sub { state $qu = CellBIS::SQL::Abstract::Util->new };
 has 'db_type'   => 'mariadb';
 
-# For Query Insert :
-# ------------------------------------------------------------------------
 sub insert {
   my $self    = shift;
   my $arg_len = scalar @_;
@@ -58,8 +56,6 @@ sub insert {
   return $data;
 }
 
-# For Query Update :
-# ------------------------------------------------------------------------
 sub update {
   my $self    = shift;
   my $arg_len = scalar @_;
@@ -73,8 +69,6 @@ sub update {
   return '';
 }
 
-# For Query Delete :
-# ------------------------------------------------------------------------
 sub delete {
   my $self = shift;
   my ($table_name, $clause) = @_;
@@ -91,8 +85,6 @@ sub delete {
   return $data;
 }
 
-# For Query Select :
-# ------------------------------------------------------------------------
 sub select {
   my $self    = shift;
   my $arg_len = scalar @_;
@@ -102,8 +94,6 @@ sub select {
   return $data;
 }
 
-# For Query Select Join :
-# ------------------------------------------------------------------------
 sub select_join {
   my $self    = shift;
   my $arg_len = scalar @_;
@@ -113,8 +103,6 @@ sub select_join {
   return $data;
 }
 
-# For Create Table :
-# ------------------------------------------------------------------------
 sub create_table {
   my $self    = shift;
   my $arg_len = scalar @_;
@@ -128,6 +116,8 @@ sub create_table {
   return $result;
 }
 
+# For Action Query String - "update"
+# --------------------------------------------------------------
 sub _qUpdate_arg3 {
   my $self = shift;
   my ($table_name, $col_val, $clause) = @_;
@@ -196,8 +186,8 @@ sub _qUpdate_arg5 {
   return $data;
 }
 
-# For Action Query String - "select" - arg3 :
-# ------------------------------------------------------------------------
+# For Action Query String - "select" :
+# --------------------------------------------------------------
 sub _qSelect_arg3 {
   my $self = shift;
   my ($table_name, $column, $clause) = @_;
@@ -251,8 +241,8 @@ sub _qSelect_arg3 {
   return $data;
 }
 
-# For Action Query String - "select_join" - arg3 :
-# ------------------------------------------------------------------------
+# For Action Query String - "select_join" :
+# --------------------------------------------------------------
 sub _qSelectJoin_arg3 {
   my $self = shift;
   my ($table_name, $column, $clause) = @_;
