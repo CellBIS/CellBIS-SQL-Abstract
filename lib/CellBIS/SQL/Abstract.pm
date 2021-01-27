@@ -34,16 +34,16 @@ sub insert {
 
     if ($type && $type eq 'no-pre-st') {
       $value_col = join ', ',
-        $self->QueryUtil->replace_data_value_insert_no_pre_st(\@table_data);
+        $self->QueryUtil->data_insert(\@table_data);
     }
     elsif ($type && $type eq 'pre-st') {
       @get_data_value
-        = $self->QueryUtil->replace_data_value_insert(\@table_data);
+        = $self->QueryUtil->data_insert_pre_st(\@table_data);
       $value_col = join ', ', @get_data_value;
     }
     else {
       $value_col = join ', ',
-        $self->QueryUtil->replace_data_value_insert_no_pre_st(\@table_data);
+        $self->QueryUtil->data_insert(\@table_data);
     }
 
     $field_col = trim($field_col);

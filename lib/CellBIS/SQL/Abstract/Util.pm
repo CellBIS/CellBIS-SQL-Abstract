@@ -112,7 +112,7 @@ sub type_join {
 
 # For replace data values "insert" :
 # ------------------------------------------------------------------------
-sub replace_data_value_insert {
+sub data_insert_pre_st {
   my $self = shift;
   my ($data_value) = @_;
 
@@ -124,7 +124,7 @@ sub replace_data_value_insert {
 
 # For replace data values "insert" in no prepare statement :
 # ------------------------------------------------------------------------
-sub replace_data_value_insert_no_pre_st {
+sub data_insert {
   my $self = shift;
   my ($data_value) = @_;
 
