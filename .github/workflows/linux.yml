@@ -34,8 +34,8 @@ jobs:
         run: cpanm -n App::cpanminus ExtUtils::MakeMaker
       - name: Install dependencies
         run: |
-          cpanm -n --installdeps . --with-all-features
-          cpanm -n Test::Pod Test::Pod::Coverage
+          cpanm -n --installdeps .
+          cpanm -n Test::Pod Test::Pod::Coverage Mojo::SQLite Mojo::mysql Mojo::Pg
       - name: Run tests
         run: prove -lvr
         env:
