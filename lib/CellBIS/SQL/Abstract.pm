@@ -142,7 +142,7 @@ sub create_table {
   my $result  = '';
 
   if ($arg_len >= 3) {
-    state $tables
+    my $tables
       = CellBIS::SQL::Abstract::Table->new(db_type => $self->db_type);
     $result = $tables->create_query_table(@_);
   }
