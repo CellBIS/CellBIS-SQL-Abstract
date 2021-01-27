@@ -116,10 +116,12 @@ sub data_insert_pre_st {
   my $self = shift;
   my ($data_value) = @_;
 
-  my @data   = @{$data_value};
+  my @data = @{$data_value};
+  my @value
+    = map { $self->is_sql_function($_) ? $_->[0] : $_ } @data;
   my @result = map { $self->is_sql_function($_) ? $_->[0] : '?' } @data;
   @result = grep (defined, @result);
-  return @result;
+  return [\@result, \@value];
 }
 
 # For replace data values "insert" in no prepare statement :
@@ -131,10 +133,8 @@ sub data_insert {
   my @data   = @{$data_value};
   my @result = map {
     $self->is_sql_function($_)    # for match sql function
-      ? $_                        # if defined
-        ? '\'' . $_->[0] . '\''    # true condition
-        : ""                       # false condition
-      : "'" . $_ . "'"             # if not date function.
+      ? $_->[0]                   # true condition
+      : "'" . $_ . "'"            # if not function.
   } @data;
   @result = grep (defined, @result);
   return @result;

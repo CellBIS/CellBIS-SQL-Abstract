@@ -3,7 +3,7 @@ use Mojo::Base -base;
 
 use Scalar::Util qw(blessed);
 use Carp ();
-use Mojo::Util qw(trim);
+use Mojo::Util qw(trim dumper);
 use CellBIS::SQL::Abstract::Util;
 use CellBIS::SQL::Abstract::Table;
 
@@ -33,17 +33,15 @@ sub insert {
   if ((scalar @table_field) == (scalar @table_data)) {
 
     if ($type && $type eq 'no-pre-st') {
-      $value_col = join ', ',
-        $self->QueryUtil->data_insert(\@table_data);
+      $value_col = join ', ', $self->QueryUtil->data_insert(\@table_data);
     }
     elsif ($type && $type eq 'pre-st') {
       @get_data_value
-        = $self->QueryUtil->data_insert_pre_st(\@table_data);
+        = @{$self->QueryUtil->data_insert_pre_st(\@table_data)->[0]};
       $value_col = join ', ', @get_data_value;
     }
     else {
-      $value_col = join ', ',
-        $self->QueryUtil->data_insert(\@table_data);
+      $value_col = join ', ', $self->QueryUtil->data_insert(\@table_data);
     }
 
     $field_col = trim($field_col);
@@ -54,6 +52,42 @@ sub insert {
     $data = "INSERT INTO $table_name($field_col) VALUES($value_col)";
   }
   return $data;
+}
+
+sub insert_bulk {
+  my ($self, $table_name, $column, $col_val, $type) = @_;
+
+  $type //= '';
+  my @table_field = @{$column};
+  my @table_data  = ();
+  my @value_data  = ();
+
+  # for field column
+  my $field_col = join ', ', @table_field;
+  my $value_col = '';
+
+  # for data column
+  for my $value (@{$col_val}) {
+    if ($type eq 'pre-st') {
+      push @value_data, @{$self->QueryUtil->data_insert_pre_st($value)->[1]};
+      push @table_data,
+          '('
+        . (join ', ', @{$self->QueryUtil->data_insert_pre_st($value)->[0]})
+        . ')';
+    }
+    else {
+      push @table_data,
+        '(' . (join ', ', $self->QueryUtil->data_insert($value)) . ')';
+    }
+  }
+
+  $field_col = trim($field_col);
+  $value_col = trim(join(', ', @table_data));
+  $value_col =~ s/\,$//g;
+  $value_col =~ s/\s\,//g;
+
+  return ["INSERT INTO ${table_name}($field_col) VALUES $value_col",
+    @value_data];
 }
 
 sub update {
@@ -76,7 +110,6 @@ sub delete {
 
   if (ref($clause) eq "HASH") {
 
-    #    my $size_clause = scalar keys %{$clause};
     if (exists $clause->{where}) {
       my $where_clause = $self->QueryUtil->create_clause($clause);
       $data = "DELETE FROM $table_name \n$where_clause";
