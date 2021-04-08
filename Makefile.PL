@@ -25,7 +25,7 @@ my %WriteMakefileArgs = (
     "Mojolicious" => 0,
     "Scalar::Util" => 0
   },
-  "VERSION" => "1.5",
+  "VERSION" => "1.6",
   "test" => {
     "TESTS" => "t/*.t t/02-query/*.t t/03-additional/mysql/*.t t/03-additional/sqlite/*.t"
   }

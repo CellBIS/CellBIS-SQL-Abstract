@@ -8,7 +8,7 @@ use CellBIS::SQL::Abstract::Util;
 use CellBIS::SQL::Abstract::Table;
 
 # ABSTRACT: SQL Query Generator
-our $VERSION = '1.5';
+our $VERSION = '1.6';
 
 has 'QueryUtil' => sub { state $qu = CellBIS::SQL::Abstract::Util->new };
 has 'db_type'   => 'mariadb';
