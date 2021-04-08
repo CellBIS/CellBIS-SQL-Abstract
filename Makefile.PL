@@ -20,6 +20,7 @@ my %WriteMakefileArgs = (
   "LICENSE" => "artistic_2",
   "NAME" => "CellBIS::SQL::Abstract",
   "PREREQ_PM" => {
+    "Mojo::SQLite" => 0,
     "Hash::MultiValue" => 0,
     "Mojolicious" => 0,
     "Scalar::Util" => 0
